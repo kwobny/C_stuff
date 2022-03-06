@@ -28,10 +28,9 @@ int main(int argc, char *argv[]) {
         // Check if character is in one of the character sets,
         // i.e. if it is alphanumeric. If it is, then record its location
         // in the character set array.
-        char *location;
-        const character_set_t *character_set;
-        for (size_t j = 0; j < sizeof(characterSets); j++) {
-            character_set = &characterSets[i];
+        char *location = NULL;
+        const character_set_t *character_set = characterSets;
+        for ( ; character_set - characterSets < sizeof(characterSets)/sizeof(characterSets[0]); character_set++) {
             location = strchr(character_set->elements, i);
             if (location != NULL)
                 break;
@@ -40,9 +39,15 @@ int main(int argc, char *argv[]) {
         // If character is a letter or digit,
         // shift it the specified number of places
         // down the alphabet/digits.
+        // Wrap around if it hits the end.
         if (location != NULL) {
-            location += shift_amount % character_set->size;
-            location = character_set->elements + (location + shift_amount % character_set->size - character_set->elements) % character_set->size;
+            size_t offset = (location + shift_amount - character_set->elements) % character_set->size;
+            location = character_set->elements + offset;
+        }
+
+        int return_code = putchar(location == NULL ? i : *location);
+        if (return_code == EOF) {
+            return 1;
         }
     }
     return 0;
