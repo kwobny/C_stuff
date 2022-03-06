@@ -1,9 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 
-const char *const characterSets[] = {
-    "abcdefghijklmnopqrstuvwxyz",
-    "0123456789",
+#define INIT_CHARACTER_SET(set) {\
+    .size = sizeof(set),\
+    .elements = set,\
+}
+
+typedef struct {
+    size_t size;
+    char *elements;
+} character_set_t;
+
+const character_set_t characterSets[] = {
+    INIT_CHARACTER_SET("abcdefghijklmnopqrstuvwxyz"),
+    INIT_CHARACTER_SET("0123456789"),
 };
 
 int main(int argc, char *argv[]) {
@@ -18,16 +28,21 @@ int main(int argc, char *argv[]) {
         // Check if character is in one of the character sets,
         // i.e. if it is alphanumeric. If it is, then record its location
         // in the character set array.
-        char *location = NULL;
-        for (size_t j = 0; j < sizeof(characterSets) && location == NULL; j++) {
-            location = strchr(characterSets[i], i);
+        char *location;
+        const character_set_t *character_set;
+        for (size_t j = 0; j < sizeof(characterSets); j++) {
+            character_set = &characterSets[i];
+            location = strchr(character_set->elements, i);
+            if (location != NULL)
+                break;
         }
 
         // If character is a letter or digit,
         // shift it the specified number of places
         // down the alphabet/digits.
         if (location != NULL) {
-            location += shift_amount;
+            location += shift_amount % character_set->size;
+            location = character_set->elements + (location + shift_amount % character_set->size - character_set->elements) % character_set->size;
         }
     }
     return 0;
