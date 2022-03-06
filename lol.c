@@ -1,20 +1,16 @@
 #include <stdio.h>
-#include <search.h>
+#include <string.h>
 
-const char letters[] = "abcdefghijklmnopqrstuvwxyz";
-const char digits[] = "0123456789";
-size_t numberOfLetters = sizeof(letters)-1;
-size_t numberOfDigits = sizeof(digits)-1;
-
-int compareChar(const char *key, const char *other) {
-    return *key - *other;
-}
+const char *const characterSets[] = {
+    "abcdefghijklmnopqrstuvwxyz",
+    "0123456789",
+};
 
 int main(void) {
-    for (char i = getchar(); i != EOF; i = getchar()) {
-        char *location = lfind(&i, letters, &numberOfLetters, sizeof(char), compareChar);
-        if (location == NULL) {
-            location = lfind(&i, digits, &numberOfDigits, sizeof(char), compareChar);
+    for (int i = getchar(); i != EOF; i = getchar()) {
+        char *location = NULL;
+        for (size_t j = 0; j < sizeof(characterSets) && location == NULL; j++) {
+            location = strchr(characterSets[i], i);
         }
 
 hello:
