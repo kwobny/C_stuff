@@ -2,5 +2,4 @@ gcc
 -Og
 -ggdb3
 -Wall
--Werror
 -o build/out
