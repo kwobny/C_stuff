@@ -1,0 +1,5 @@
+gcc
+-Og
+-Wall
+-Werror
+-o build/out
