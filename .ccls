@@ -1,0 +1,5 @@
+gcc
+-Og
+-ggdb3
+-Wall
+-o build/out
