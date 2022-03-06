@@ -2,7 +2,7 @@
 #include <string.h>
 
 #define INIT_CHARACTER_SET(set) {\
-    .size = sizeof(set),\
+    .size = sizeof(set) - 1,\
     .elements = set,\
 }
 
@@ -43,9 +43,12 @@ int main(int argc, char *argv[]) {
         if (location != NULL) {
             size_t offset = (location + shift_amount - character_set->elements) % character_set->size;
             location = character_set->elements + offset;
+            i = *location;
         }
 
-        int return_code = putchar(location == NULL ? i : *location);
+        // Print either the shifted character if alphanumeric
+        // or the same character if not.
+        int return_code = putchar(i);
         if (return_code == EOF) {
             return 1;
         }
