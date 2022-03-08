@@ -19,11 +19,11 @@ const character_set_t characterSets[] = {
 int main(int argc, char *argv[]) {
     int shift_amount = 1;
     for (int i = getchar(); i != EOF; i = getchar()) {
-        // Skip current character if it is a null byte
-        // to prevent strchr from matching it as part of
-        // a character set.
+        // Skip shift processing for current character
+        // if it is a null byte to prevent strchr from
+        // matching it as part of a character set.
         if (i == 0)
-            continue;
+            goto print_out;
 
         // Check if character is in one of the character sets,
         // i.e. if it is alphanumeric. If it is, then record its location
@@ -46,6 +46,7 @@ int main(int argc, char *argv[]) {
             i = *location;
         }
 
+print_out:;
         // Print either the shifted character if alphanumeric
         // or the same character if not.
         int return_code = putchar(i);
