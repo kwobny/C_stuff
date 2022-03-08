@@ -17,7 +17,7 @@ const character_set_t characterSets[] = {
 };
 
 int main(int argc, char *argv[]) {
-    int shift_amount = 1;
+    int shift_amount = -1;
     for (int i = getchar(); i != EOF; i = getchar()) {
         // Skip shift processing for current character
         // if it is a null byte to prevent strchr from
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
         // down the alphabet/digits.
         // Wrap around if it hits the end.
         if (location != NULL) {
-            size_t offset = (location + shift_amount - character_set->elements) % character_set->size;
+            size_t offset = ((location - character_set->elements) + shift_amount) % character_set->size;
             location = character_set->elements + offset;
             i = *location;
         }
@@ -51,6 +51,8 @@ print_out:;
         // or the same character if not.
         int return_code = putchar(i);
         if (return_code == EOF) {
+            // If there was an error with printing,
+            // exit with non-zero error code.
             return 1;
         }
     }
